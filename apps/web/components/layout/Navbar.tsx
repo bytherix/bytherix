@@ -42,10 +42,10 @@ export function Navbar() {
             : 'bg-transparent'
         )}
       >
-        <nav
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
-          aria-label="Main navigation"
-        >
+       <nav
+  className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[var(--nav-height)] flex items-center justify-between"
+  aria-label="Main navigation"
+>
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group" aria-label="Bytherix home">
             <div className="relative w-9 h-9 rounded-xl overflow-hidden ring-1 ring-[var(--border)] group-hover:ring-[var(--color-brand-blue)] transition-all duration-200">
