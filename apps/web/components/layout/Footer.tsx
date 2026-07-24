@@ -68,13 +68,12 @@ export function Footer() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-        {/* ── Main grid ── */}
-        <div className="py-16 grid grid-cols-1 lg:grid-cols-5 gap-12">
+        {/* ── Single unified grid: Brand + all 4 link columns ── */}
+        <div className="pt-12 pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
 
-          {/* Brand column — spans 2 cols on large screens */}
-          <div className="lg:col-span-2">
-            {/* Logo text */}
-            <Link href="/" className="inline-block mb-5">
+          {/* Brand column */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Link href="/" className="inline-block mb-4">
               <span
                 className="text-3xl font-black tracking-widest uppercase"
                 style={{ color: '#1452CC' }}
@@ -84,7 +83,7 @@ export function Footer() {
             </Link>
 
             <p
-              className="text-sm leading-relaxed mb-8 max-w-xs"
+              className="text-sm leading-relaxed mb-6 max-w-xs"
               style={{ color: '#8B9DC3' }}
             >
               Transforming ideas into innovation through cutting-edge
@@ -121,79 +120,41 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Link columns — top row (Academy, Services, Solutions) */}
-          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-8">
-            {Object.entries(footerLinks)
-              .filter(([title]) => title !== 'Company')
-              .map(([title, links]) => (
-                <div key={title}>
-                  <h3
-                    className="text-sm font-bold mb-5 tracking-wide"
-                    style={{ color: '#F8FAFF' }}
-                  >
-                    {title}
-                  </h3>
-                  <ul className="space-y-3.5">
-                    {links.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="text-sm transition-colors duration-150"
-                          style={{ color: '#8B9DC3' }}
-                          onMouseEnter={(e) =>
-                            ((e.currentTarget as HTMLAnchorElement).style.color = '#1452CC')
-                          }
-                          onMouseLeave={(e) =>
-                            ((e.currentTarget as HTMLAnchorElement).style.color = '#8B9DC3')
-                          }
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-          </div>
-        </div>
-
-        {/* ── Company row — sits below the main grid ── */}
-        <div
-          className="pb-12"
-          style={{ borderTop: '1px solid #1a2236', paddingTop: '2.5rem' }}
-        >
-          <div>
-            <h3
-              className="text-sm font-bold mb-5 tracking-wide"
-              style={{ color: '#F8FAFF' }}
-            >
-              Company
-            </h3>
-            <ul className="flex flex-col gap-3.5">
-              {footerLinks.Company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm transition-colors duration-150"
-                    style={{ color: '#8B9DC3' }}
-                    onMouseEnter={(e) =>
-                      ((e.currentTarget as HTMLAnchorElement).style.color = '#1452CC')
-                    }
-                    onMouseLeave={(e) =>
-                      ((e.currentTarget as HTMLAnchorElement).style.color = '#8B9DC3')
-                    }
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* All four link columns rendered in the SAME grid — no filtering, no nesting */}
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title}>
+              <h3
+                className="text-sm font-bold mb-4 tracking-wide"
+                style={{ color: '#F8FAFF' }}
+              >
+                {title}
+              </h3>
+              <ul className="space-y-2.5">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm transition-colors duration-150"
+                      style={{ color: '#8B9DC3' }}
+                      onMouseEnter={(e) =>
+                        ((e.currentTarget as HTMLAnchorElement).style.color = '#1452CC')
+                      }
+                      onMouseLeave={(e) =>
+                        ((e.currentTarget as HTMLAnchorElement).style.color = '#8B9DC3')
+                      }
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* ── Bottom bar ── */}
         <div
-          className="py-6 flex flex-col sm:flex-row items-center justify-between gap-3"
+          className="py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
           style={{ borderTop: '1px solid #1a2236' }}
         >
           <p className="text-xs" style={{ color: '#4A5A7A' }}>
