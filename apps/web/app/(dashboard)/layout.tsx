@@ -6,7 +6,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-bx-navy flex">
       <DashboardSidebar />
       <div className="flex-1 flex flex-col min-w-0">
-        <DashboardHeader />
+        <DashboardHeader
+  dateStr={new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  })}
+/>
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>

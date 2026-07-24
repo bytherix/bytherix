@@ -1,12 +1,18 @@
 'use client'
+
 import { Bell } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  dateStr: string
+}
+
+export function DashboardHeader({ dateStr }: DashboardHeaderProps) {
   const { user } = useAuthStore()
+
   return (
     <header className="h-14 border-b border-bx-border bg-bx-card/50 backdrop-blur-sm flex items-center justify-between px-6 shrink-0">
-      <p className="text-bx-slate text-sm">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+      <p className="text-bx-slate text-sm">{dateStr}</p>
       <div className="flex items-center gap-3">
         <button className="relative w-8 h-8 rounded-lg border border-bx-border flex items-center justify-center text-bx-muted hover:text-bx-white transition-colors" aria-label="Notifications">
           <Bell className="w-4 h-4" />

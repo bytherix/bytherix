@@ -25,7 +25,7 @@ export function ForgotPasswordForm() {
     <div className="text-center py-8">
       <CheckCircle className="w-14 h-14 text-bx-green mx-auto mb-4" />
       <h2 className="text-xl font-bold text-bx-white mb-2">Email sent!</h2>
-      <p className="text-bx-slate text-sm mb-6">If that email exists, you'll receive a reset link shortly.</p>
+      <p className="text-bx-slate text-sm mb-6">If that email exists, you&apos;ll receive a reset link shortly.</p>
       <Link href="/login" className="text-bx-blue text-sm font-medium hover:text-bx-blue-light">← Back to sign in</Link>
     </div>
   )

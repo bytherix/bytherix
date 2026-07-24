@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, BookOpen, Briefcase } from 'lucide-react'
 
-const floatingChips = [
+const _floatingChips = [
   { label: '500+ students', emoji: '🎓', delay: 0,   x: '-left-10',  y: '-top-6' },
   { label: 'Certified courses', emoji: '✅', delay: 0.4, x: '-right-8', y: '-top-4' },
   { label: '95% hired', emoji: '💼', delay: 0.8, x: '-right-12', y: 'bottom-8' },
@@ -68,7 +68,7 @@ export function Hero() {
             className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8 max-w-md"
           >
             Bytherix is where developers, hackers, and builders are made — through
-            real courses, live projects, and mentorship from people who've actually shipped things.
+            real courses, live projects, and mentorship from people who&apos;ve actually shipped things.
           </motion.p>
 
           <motion.div

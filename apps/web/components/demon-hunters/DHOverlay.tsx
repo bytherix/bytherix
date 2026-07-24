@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Shield, Terminal, Users, Trophy, ExternalLink } from "lucide-react";
 import { TerminalText } from "./TerminalText";
+import Link from "next/link";
 
 interface DHOverlayProps {
   open: boolean;
@@ -246,14 +247,14 @@ export function DHOverlay({ open, onClose }: DHOverlayProps) {
                 transition={{ delay: 0.85 }}
                 className="text-center"
               >
-                <a
+                <Link
                   href="/training/cyber-security"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-black font-mono font-bold px-8 py-3 rounded transition-colors"
                 >
                   <Terminal className="w-5 h-5" />
                   JOIN_THE_HUNT
                   <ExternalLink className="w-4 h-4" />
-                </a>
+                </Link>
                 <p className="font-mono text-green-800 text-xs mt-3">
                   Press ESC to exit secure zone
                 </p>

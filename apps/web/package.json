@@ -38,9 +38,11 @@
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
+    "@vitest/coverage-v8": "4.1.10",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.28.0",
     "eslint-config-next": "^16.2.7",
+    "happy-dom": "20.11.1",
     "postcss": "^8.5.4"
   }
 }

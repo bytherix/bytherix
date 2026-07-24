@@ -81,7 +81,7 @@ export function Testimonials() {
               </div>
 
               <blockquote className="text-sm leading-relaxed flex-1 mb-5" style={{ color: '#8B9DC3' }}>
-                "{t.text}"
+                &quot;{t.text}&quot;
               </blockquote>
 
               <figcaption className="flex items-center gap-3">

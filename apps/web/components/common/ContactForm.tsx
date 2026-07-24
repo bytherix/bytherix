@@ -46,11 +46,10 @@ const INQUIRY_OPTIONS = [
  * In the future, replace the simulated delay with:
  * `await apiClient.post('/contact', data)`
  */
-async function submitContactForm(data: ContactFormData): Promise<{ success: boolean; message?: string }> {
-  // Simulate network request
+async function submitContactForm(_data: ContactFormData): Promise<{ success: boolean; message?: string }> {
+
   await new Promise((resolve) => setTimeout(resolve, 1200))
-  // For testing error state handling, you can conditionally throw here.
-  // In production, real HTTP errors will be caught in the form submit handler.
+
   return { success: true }
 }
 interface ContactFormProps {

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { TrainingHero } from '@/components/courses/TrainingHero'
 import { CourseGrid } from '@/components/courses/CourseGrid'
@@ -10,12 +11,18 @@ export const metadata: Metadata = {
 
 type Props = { searchParams: Promise<{ q?: string; category?: string; level?: string }> }
 
-export default async function TrainingPage({ searchParams }: Props) {
+async function CourseGridLoader({ searchParams }: Props) {
   const filters = await searchParams
+  return <CourseGrid filters={filters} />
+}
+
+export default function TrainingPage({ searchParams }: Props) {
   return (
     <>
       <TrainingHero />
-      <CourseGrid filters={filters} />
+      <Suspense fallback={null}>
+        <CourseGridLoader searchParams={searchParams} />
+      </Suspense>
     </>
   )
 }

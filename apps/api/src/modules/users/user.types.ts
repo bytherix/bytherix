@@ -1,37 +1,33 @@
-import { HydratedDocument, Types } from 'mongoose'
+import { HydratedDocument, Types } from "mongoose";
 
-export type UserRole =
-  | 'USER'
-  | 'MODERATOR'
-  | 'ADMIN'
-  | 'SUPER_ADMIN'
+export type UserRole = "USER" | "MODERATOR" | "ADMIN" | "SUPER_ADMIN";
 
 export interface IUser {
-  _id: Types.ObjectId
+  _id: Types.ObjectId;
 
-  email: string
-  password?: string
+  email: string;
+  password?: string | undefined;
 
-  firstName: string
-  lastName: string
+  firstName: string;
+  lastName: string;
 
-  role: UserRole
+  role: UserRole;
 
-  isActive: boolean
-  isEmailVerified: boolean
+  isActive: boolean;
+  isEmailVerified: boolean;
 
-  emailVerificationToken?: string
-  emailVerificationExpiry?: Date
+  emailVerificationToken?: string | undefined;
+  emailVerificationExpiry?: Date | undefined;
 
-  passwordResetToken?: string
-  passwordResetExpiry?: Date
+  passwordResetToken?: string | undefined;
+  passwordResetExpiry?: Date | undefined;
 
-  avatar?: string
-  lastLoginAt?: Date
+  avatar?: string | undefined;
+  lastLoginAt?: Date | undefined;
 
-  createdAt: Date
-  updatedAt: Date
-  deletedAt?: Date
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date | undefined;
 }
 
-export type UserDocument = HydratedDocument<IUser>
+export type UserDocument = HydratedDocument<IUser>;

@@ -1,7 +1,7 @@
 export class AppError extends Error {
   public readonly statusCode:    number
   public readonly isOperational: boolean
-  public readonly code?:         string
+   public readonly code:          string | undefined 
 
   constructor(message: string, statusCode: number, code?: string, isOperational = true) {
     super(message)

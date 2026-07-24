@@ -52,6 +52,7 @@ export class AuthService {
       throw new UnauthorizedError('Invalid credentials')
     }
 
+    if (!user.password) throw new UnauthorizedError('Invalid credentials') // ← fixed: guard before argon2.verify
     const valid = await argon2.verify(user.password, password)
     if (!valid) {
       await auditService.log({ userId: user._id as never, action: 'LOGIN_FAILED', resource: 'auth', ip: device.ip, userAgent: device.userAgent, success: false })
@@ -69,7 +70,7 @@ export class AuthService {
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     })
 
-    await repo.update(user._id, { lastLoginAt: new Date() })
+    await repo.update(user._id.toString(), { lastLoginAt: new Date() }) // ← fixed
     await auditService.log({ userId: user._id as never, action: 'LOGIN_SUCCESS', resource: 'auth', ip: device.ip, userAgent: device.userAgent, success: true })
 
     return { accessToken, refreshToken, user }
@@ -108,7 +109,7 @@ export class AuthService {
   async verifyEmail(token: string): Promise<void> {
     const user = await repo.findByVerificationToken(token)
     if (!user) throw new NotFoundError('Verification token')
-    await repo.update(user._id, { isEmailVerified: true, emailVerificationToken: undefined, emailVerificationExpiry: undefined })
+    await repo.update(user._id.toString(), { isEmailVerified: true, emailVerificationToken: undefined, emailVerificationExpiry: undefined }) // ← fixed
   }
 
   async forgotPassword(email: string): Promise<void> {
@@ -116,7 +117,7 @@ export class AuthService {
     if (!user) return // Silent — don't leak whether email exists
     const token  = crypto.randomBytes(32).toString('hex')
     const hashed = this.sha256(token)
-    await repo.update(user._id, { passwordResetToken: hashed, passwordResetExpiry: new Date(Date.now() + 60 * 60 * 1000) })
+    await repo.update(user._id.toString(), { passwordResetToken: hashed, passwordResetExpiry: new Date(Date.now() + 60 * 60 * 1000) }) // ← fixed
     // TODO: enqueue email via BullMQ with plaintext token
   }
 
@@ -125,18 +126,19 @@ export class AuthService {
     const user = await repo.findByResetToken(hash)
     if (!user) throw new UnauthorizedError('Invalid or expired reset token')
     const password = await argon2.hash(newPassword, ARGON2_OPTIONS)
-    await repo.update(user._id, { password, passwordResetToken: undefined, passwordResetExpiry: undefined })
-    await this.logoutAll(user._id)
+    await repo.update(user._id.toString(), { password, passwordResetToken: undefined, passwordResetExpiry: undefined }) // ← fixed
+    await this.logoutAll(user._id.toString()) // ← fixed
   }
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
     const user = await repo.findByEmail(userId, true)
     if (!user) throw new NotFoundError('User')
+    if (!user.password) throw new UnauthorizedError('Current password is incorrect') // ← fixed: guard before argon2.verify
     const valid = await argon2.verify(user.password, currentPassword)
     if (!valid) throw new UnauthorizedError('Current password is incorrect')
     const password = await argon2.hash(newPassword, ARGON2_OPTIONS)
-    await repo.update(user._id, { password })
-    await this.logoutAll(user._id)
+    await repo.update(user._id.toString(), { password }) // ← fixed
+    await this.logoutAll(user._id.toString()) // ← fixed
   }
 
   async getSessions(userId: string) {

@@ -10,7 +10,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-bx-white">Dashboard</h1>
-        <p className="text-bx-slate text-sm mt-1">Welcome back! Here's your learning progress.</p>
+        <p className="text-bx-slate text-sm mt-1">Welcome back! Here&apos;s your learning progress.</p>
       </div>
       <DashboardStats />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
