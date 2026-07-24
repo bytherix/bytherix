@@ -116,4 +116,4 @@ public/uploads/
 # Wrong lockfiles for this project
 package-lock.json
 pnpm-lock.yaml
-.pnpm-store
+.pnpm-storepackage-lock.json
