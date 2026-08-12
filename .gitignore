@@ -4,6 +4,4 @@ build/
 .env
 coverage/
 *.log
-seed/
-script/
 uploads/
