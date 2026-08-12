@@ -64,9 +64,11 @@ export class UserService {
         return User.findByIdAndUpdate(userId, { verificationSentAt: new Date() }, { new: true });
     }
 
+
     // FIND OR CREATE GOOGLE USER
     static async findOrCreateGoogleUser(data: { email: string; fullName: string }) {
         const email = data.email.toLowerCase().trim();
+
         let user = await User.findOne({ email });
 
         if (user) {
@@ -74,6 +76,9 @@ export class UserService {
                 user.provider = "google";
                 await user.save();
             }
+
+            await user.populate("roleId");
+
             return user;
         }
 
@@ -87,8 +92,11 @@ export class UserService {
             provider: "google",
         });
 
+        await user.populate("roleId");
+
         return user;
     }
+
 
 
     //FETCH USERS PROFILE (ADMINS)

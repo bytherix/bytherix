@@ -310,7 +310,7 @@ export class AuthService {
             fullName: payload.name || "Google User",
         });
 
-        const roleObj = (user.roleId as any);
+        const roleObj = user.roleId as any;
         const roleId = roleObj?._id?.toString();
         const roleName = roleObj?.name;
 
