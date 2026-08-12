@@ -1,0 +1,199 @@
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Registration successful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        "400":
+          description: Required fields missing or validation error.
+        "409":
+          description: Email already registered.
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: "refreshToken=abcde12345; Path=/; HttpOnly; Max-Age=604800"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Incorrect email or password.
+        "401":
+          description: Email is not verified.
+        "429":
+          description: Cooldown period active for resending verification email.
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      security: []
+      responses:
+        "200":
+          description: Logged out successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogoutResponse"
+        "401":
+          description: Refresh token missing.
+
+  /auth/verify/{accessToken}:
+    get:
+      tags:
+        - Authentication
+      summary: Verify email address
+      security: []
+      parameters:
+        - name: accessToken
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Email verified successfully or already verified.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyEmailResponse"
+        "400":
+          description: Invalid verification token.
+        "404":
+          description: User not found.
+
+  /auth/forgot-password:
+    post:
+      tags:
+        - Authentication
+      summary: Request password reset link
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordRequest"
+      responses:
+        "200":
+          description: Password reset email sent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForgotPasswordResponse"
+        "400":
+          description: Email is required.
+        "404":
+          description: User not found.
+
+  /auth/reset-password/{token}:
+    post:
+      tags:
+        - Authentication
+      summary: Reset password using token
+      security: []
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordRequest"
+      responses:
+        "200":
+          description: Password reset successful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResetPasswordResponse"
+        "400":
+          description: Invalid reset token or short password.
+        "404":
+          description: User not found.
+
+  /auth/google:
+    post:
+      tags:
+        - Authentication
+      summary: Login or register with Google Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleLoginRequest"
+      responses:
+        "200":
+          description: Login successful.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: "refreshToken=abcde12345; Path=/; HttpOnly; Max-Age=604800"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoogleLoginResponse"
+        "400":
+          description: Invalid Google token or validation error.
+
+  /auth/refresh-token:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token using cookie refresh token
+      security: []
+      responses:
+        "200":
+          description: Token refreshed successfully.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: "refreshToken=abcde12345; Path=/; HttpOnly; Max-Age=604800"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshTokenResponse"
+        "401":
+          description: Refresh token missing or expired.
+        "404":
+          description: User not found.
+
+

@@ -1,0 +1,73 @@
+paths:
+  /user-profiles:
+    put:
+      tags:
+        - Users
+      summary: Create or update own user profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CreateOrUpdateProfileRequest"
+      responses:
+        "200":
+          description: Profile saved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfileResponse"
+        "401":
+          description: Unauthorized access.
+        "400":
+          description: Validation error or invalid inputs.
+
+  /user-profiles/me:
+    get:
+      tags:
+        - Users
+      summary: Fetch own user profile
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Profile fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfileResponse"
+        "401":
+          description: Unauthorized access.
+        "404":
+          description: Profile not found.
+
+  /user-profiles/{id}:
+    get:
+      tags:
+        - Users
+      summary: Fetch user profile by user ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+          description: The User ID of the profile to fetch
+      responses:
+        "200":
+          description: Profile fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfileResponse"
+        "400":
+          description: Invalid ID format.
+        "401":
+          description: Unauthorized access.
+        "404":
+          description: User/Profile not found.

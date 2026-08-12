@@ -1,0 +1,107 @@
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        name:
+          type: string
+        group:
+          type: string
+          example: "Category"
+
+    CreateCategoryRequest:
+      type: object
+      required:
+        - name
+        - group
+      properties:
+        name:
+          type: string
+          example: "Category.create"
+        group:
+          type: string
+          example: "Category"
+
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Category.update"
+        group:
+          type: string
+          example: "Category"
+
+    CategoryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Category created successfully"
+        data:
+          $ref: "#/components/schemas/category"
+
+    DeleteCategoryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Category deleted successfully"
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              example: "66a1f3e9c4b7d9a123456789"
+            name:
+              type: string
+              example: "Category name"
+            group:
+              type: string
+              example: "Category"
+            createdAt:
+              type: string
+              format: date-time
+              example: "2026-07-23T10:30:00.000Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2026-07-23T10:30:00.000Z"
+
+    FetchAllCategorysResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Categorys fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 5
+            limit:
+              type: integer
+              example: 10
+            page:
+              type: integer
+              example: 1
+            pages:
+              type: integer
+              example: 1

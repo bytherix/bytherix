@@ -1,0 +1,139 @@
+paths:
+  /permissions:
+    get:
+      tags:
+        - Permissions
+      summary: Fetch all permissions
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Permissions fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FetchAllPermissionsResponse"
+        "401":
+          description: Unauthorized.
+        "403":
+          description: Forbidden. Missing permission.read.
+
+    post:
+      tags:
+        - Permissions
+      summary: Create a permission
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePermissionRequest"
+      responses:
+        "201":
+          description: Permission created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionResponse"
+        "400":
+          description: Required fields missing.
+        "401":
+          description: Unauthorized.
+        "403":
+          description: Forbidden. Missing permission.create.
+
+  /permissions/{id}:
+    get:
+      tags:
+        - Permissions
+      summary: Fetch permission by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+      responses:
+        "200":
+          description: Permission fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionResponse"
+        "400":
+          description: Invalid ID format.
+        "401":
+          description: Unauthorized.
+        "403":
+          description: Forbidden. Missing permission.read.
+        "404":
+          description: Permission not found.
+
+    patch:
+      tags:
+        - Permissions
+      summary: Update permission
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePermissionRequest"
+      responses:
+        "200":
+          description: Permission updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionResponse"
+        "400":
+          description: Invalid ID format or bad request.
+        "401":
+          description: Unauthorized.
+        "403":
+          description: Forbidden. Missing permission.update.
+        "404":
+          description: Permission not found.
+
+    delete:
+      tags:
+        - Permissions
+      summary: Delete permission
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+      responses:
+        "200":
+          description: Permission deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeletePermissionResponse"
+        "400":
+          description: Invalid ID format.
+        "401":
+          description: Unauthorized.
+        "403":
+          description: Forbidden. Missing permission.delete.
+        "404":
+          description: Permission not found.

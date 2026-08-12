@@ -1,0 +1,115 @@
+paths:
+  /enrollments:
+    post:
+      tags:
+        - Enrollments
+      summary: Enroll in a course (Authenticated)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEnrollmentRequest"
+      responses:
+        "201":
+          description: Enrolled successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnrollmentResponse"
+        "400":
+          description: Duplicate enrollment or invalid data.
+        "401":
+          description: Unauthorized.
+        "404":
+          description: Course not found.
+
+  /enrollments/me:
+    get:
+      tags:
+        - Enrollments
+      summary: Retrieve all enrollments of the logged-in user (Authenticated)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Enrollments fetched successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Enrollments fetched successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Enrollment"
+        "401":
+          description: Unauthorized.
+
+  /enrollments/{courseId}:
+    get:
+      tags:
+        - Enrollments
+      summary: Fetch enrollment details for a specific course (Authenticated)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+      responses:
+        "200":
+          description: Enrollment fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnrollmentResponse"
+        "401":
+          description: Unauthorized.
+        "404":
+          description: Enrollment not found.
+
+  /enrollments/{courseId}/progress:
+    patch:
+      tags:
+        - Enrollments
+      summary: Update course progression by marking a video completed (Authenticated)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProgressRequest"
+      responses:
+        "200":
+          description: Progress updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnrollmentResponse"
+        "400":
+          description: Invalid inputs or video does not belong to course.
+        "401":
+          description: Unauthorized.
+        "404":
+          description: Enrollment or course not found.

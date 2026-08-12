@@ -1,0 +1,126 @@
+components:
+  schemas:
+    RolePopulated:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456781"
+        name:
+          type: string
+          example: "admin"
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        fullName:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        roleId:
+          oneOf:
+            - type: string
+              example: "66a1f3e9c4b7d9a123456781"
+            - $ref: "#/components/schemas/RolePopulated"
+        role:
+          $ref: "#/components/schemas/RolePopulated"
+        allowedPermissions:
+          type: array
+          items:
+            type: string
+            example: "66a1f3e9c4b7d9a123456782"
+        deniedPermissions:
+          type: array
+          items:
+            type: string
+            example: "66a1f3e9c4b7d9a123456783"
+        isVerified:
+          type: boolean
+          example: true
+        verificationSentAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+        provider:
+          type: string
+          enum:
+            - local
+            - google
+          example: "local"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+
+    UpdateUserRoleRequest:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          example: "moderator"
+          description: Name of the role to assign to the user.
+
+    UserResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "User fetched successfully"
+        data:
+          $ref: "#/components/schemas/User"
+
+    UserPaginationMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 50
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        totalPages:
+          type: integer
+          example: 5
+        hasNextPage:
+          type: boolean
+          example: true
+
+    FetchAllUsersResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Users fetched successfully"
+        data:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+            pagination:
+              $ref: "#/components/schemas/UserPaginationMeta"

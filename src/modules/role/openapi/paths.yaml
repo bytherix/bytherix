@@ -1,0 +1,173 @@
+paths:
+  /roles:
+    get:
+      tags:
+        - Roles
+
+      summary: Fetch all roles
+
+      security:
+        - BearerAuth: []
+
+      responses:
+        "200":
+          description: Roles fetched successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+                  message:
+                    type: string
+                    example: "Roles fetched successfully"
+
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Role"
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Missing role.read permission.
+
+    post:
+      tags:
+        - Roles
+
+      summary: Create a role
+
+      description: Creates a new role with assigned permissions.
+
+      security:
+        - BearerAuth: []
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoleRequest"
+
+      responses:
+        "201":
+          description: Role created successfully.
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessRoleResponse"
+
+        "400":
+          description: Required fields missing.
+
+        "409":
+          description: Role already exists.
+
+  /roles/{id}:
+    get:
+      tags:
+        - Roles
+
+      summary: Fetch role by ID
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+          example: "66a1f2e9c4b7d9a123456789"
+
+      responses:
+        "200":
+          description: Role fetched successfully.
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessRoleResponse"
+
+        "404":
+          description: Role not found.
+
+    patch:
+      tags:
+        - Roles
+
+      summary: Update role
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRoleRequest"
+
+      responses:
+        "200":
+          description: Role updated successfully.
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessRoleResponse"
+
+        "404":
+          description: Role not found.
+
+    delete:
+      tags:
+        - Roles
+
+      summary: Delete role
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - name: id
+
+          in: path
+
+          required: true
+
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Role deleted successfully.
+
+          content:
+            application/json:
+              example:
+                success: true
+
+                message: "admin deleted successfully"
+
+        "404":
+          description: Role not found.

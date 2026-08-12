@@ -1,0 +1,81 @@
+components:
+  schemas:
+    Role:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "66a1f2e9c4b7d9a123456789"
+
+        name:
+          type: string
+          example: "admin"
+
+        permissions:
+          type: array
+          description: Permission IDs assigned to this role.
+          items:
+            type: string
+            example: "66a1f3e9c4b7d9a123456789"
+
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:30:00.000Z"
+
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:30:00.000Z"
+
+    CreateRoleRequest:
+      type: object
+
+      required:
+        - name
+        - permissions
+
+      properties:
+        name:
+          type: string
+          example: "admin"
+
+        permissions:
+          type: array
+          description: Array of permission ObjectIds.
+          items:
+            type: string
+            example: "66a1f3e9c4b7d9a123456789"
+
+    UpdateRoleRequest:
+      type: object
+
+      required:
+        - name
+        - permissions
+
+      properties:
+        name:
+          type: string
+          example: "manager"
+
+        permissions:
+          type: array
+          items:
+            type: string
+            example: "66a1f3e9c4b7d9a123456789"
+
+    SuccessRoleResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        message:
+          type: string
+          example: "Role fetched successfully"
+
+        data:
+          $ref: "#/components/schemas/Role"

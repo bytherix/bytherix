@@ -1,0 +1,106 @@
+components:
+  schemas:
+    UserProfileAvatar:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          example: "https://res.cloudinary.com/demo/image/upload/v1234567890/avatar.jpg"
+        publicId:
+          type: string
+          example: "avatar_image_public_id"
+
+    UserProfileLocation:
+      type: object
+      properties:
+        country:
+          type: string
+          example: "United States"
+        city:
+          type: string
+          example: "San Francisco"
+
+    UserProfileUserPopulated:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456781"
+        fullName:
+          type: string
+          example: "John Doe"
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        userId:
+          $ref: "#/components/schemas/UserProfileUserPopulated"
+        avatar:
+          $ref: "#/components/schemas/UserProfileAvatar"
+        bio:
+          type: string
+          example: "Passionate developer and learner."
+        website:
+          type: string
+          example: "https://johndoe.dev"
+        linkedin:
+          type: string
+          example: "https://linkedin.com/in/johndoe"
+        github:
+          type: string
+          example: "https://github.com/johndoe"
+        location:
+          $ref: "#/components/schemas/UserProfileLocation"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+
+    CreateOrUpdateProfileRequest:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+          description: "New profile avatar image file"
+        bio:
+          type: string
+          maxLength: 2000
+          example: "Passionate developer and learner."
+        website:
+          type: string
+          example: "https://johndoe.dev"
+        linkedin:
+          type: string
+          example: "https://linkedin.com/in/johndoe"
+        github:
+          type: string
+          example: "https://github.com/johndoe"
+        location:
+          type: object
+          properties:
+            country:
+              type: string
+              example: "United States"
+            city:
+              type: string
+              example: "San Francisco"
+
+    UserProfileResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Profile fetched successfully"
+        data:
+          $ref: "#/components/schemas/UserProfile"

@@ -1,0 +1,256 @@
+components:
+  schemas:
+    Expertise:
+      type: string
+      enum:
+        - "Web Development"
+        - "App Development"
+        - "Game Development"
+        - "Cybersecurity"
+        - "Software Testing"
+        - "IoT"
+        - "Robotics"
+        - "Graphic Design"
+        - "UI/UX Design"
+        - "Digital Marketing"
+        - "Cloud Computing"
+        - "DevOps"
+        - "AI"
+        - "Machine Learning"
+        - "Data Science"
+        - "Blockchain"
+        - "Web3"
+        - "Networking"
+        - "Video Editing"
+        - "Motion Graphics"
+        - "Freelancing"
+        - "Personal Branding"
+        - "Research"
+        - "Programming"
+        - "Other"
+      example: "Web Development"
+
+    InstructorProfileImage:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          example: "https://res.cloudinary.com/demo/image/upload/v1234567890/profile.jpg"
+        publicId:
+          type: string
+          example: "profile_image_public_id"
+
+    InstructorEducation:
+      type: object
+      required:
+        - degree
+        - institute
+        - year
+      properties:
+        degree:
+          type: string
+          example: "Bachelor of Science in Computer Science"
+        institute:
+          type: string
+          example: "Stanford University"
+        year:
+          type: integer
+          example: 2022
+
+    Instructor:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        userId:
+          type: string
+          example: "66a1f3e9c4b7d9a123456781"
+        profileImage:
+          $ref: "#/components/schemas/InstructorProfileImage"
+        headline:
+          type: string
+          example: "Senior Full Stack Engineer & Mentor"
+        bio:
+          type: string
+          example: "Passionate educator with over 10 years of experience in building scalable web applications."
+        expertise:
+          type: array
+          items:
+            $ref: "#/components/schemas/Expertise"
+        languages:
+          type: array
+          items:
+            type: string
+            example: "English"
+        yearsOfExperience:
+          type: number
+          example: 8
+        education:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstructorEducation"
+        website:
+          type: string
+          example: "https://johndoe.dev"
+        github:
+          type: string
+          example: "https://github.com/johndoe"
+        linkedin:
+          type: string
+          example: "https://linkedin.com/in/johndoe"
+        isVerified:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+
+    CreateInstructorRequest:
+      type: object
+      required:
+        - headline
+        - bio
+        - expertise
+      properties:
+        profileImage:
+          type: string
+          format: binary
+          description: "Instructor profile image file"
+        headline:
+          type: string
+          maxLength: 150
+          example: "Senior Full Stack Engineer & Mentor"
+        bio:
+          type: string
+          maxLength: 3000
+          example: "Passionate educator with over 10 years of experience."
+        expertise:
+          type: array
+          items:
+            $ref: "#/components/schemas/Expertise"
+        languages:
+          type: array
+          items:
+            type: string
+            example: "English"
+        yearsOfExperience:
+          type: number
+          example: 8
+        education:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstructorEducation"
+        website:
+          type: string
+          example: "https://johndoe.dev"
+        github:
+          type: string
+          example: "https://github.com/johndoe"
+        linkedin:
+          type: string
+          example: "https://linkedin.com/in/johndoe"
+
+    UpdateInstructorRequest:
+      type: object
+      properties:
+        profileImage:
+          type: string
+          format: binary
+          description: "New instructor profile image file"
+        headline:
+          type: string
+          maxLength: 150
+          example: "Senior Full Stack Engineer & Mentor"
+        bio:
+          type: string
+          maxLength: 3000
+          example: "Passionate educator with over 10 years of experience."
+        expertise:
+          type: array
+          items:
+            $ref: "#/components/schemas/Expertise"
+        languages:
+          type: array
+          items:
+            type: string
+            example: "English"
+        yearsOfExperience:
+          type: number
+          example: 8
+        education:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstructorEducation"
+        website:
+          type: string
+          example: "https://johndoe.dev"
+        github:
+          type: string
+          example: "https://github.com/johndoe"
+        linkedin:
+          type: string
+          example: "https://linkedin.com/in/johndoe"
+
+    InstructorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Instructor profile fetched successfully."
+        data:
+          $ref: "#/components/schemas/Instructor"
+
+    InstructorPaginationMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        totalPages:
+          type: integer
+          example: 1
+        hasNextPage:
+          type: boolean
+          example: false
+        hasPreviousPage:
+          type: boolean
+          example: false
+        nextPage:
+          type: integer
+          nullable: true
+          example: null
+        previousPage:
+          type: integer
+          nullable: true
+          example: null
+
+    FetchAllInstructorsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Instructor profiles fetched successfully."
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Instructor"
+        meta:
+          $ref: "#/components/schemas/InstructorPaginationMeta"

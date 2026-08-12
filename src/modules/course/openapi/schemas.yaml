@@ -1,0 +1,231 @@
+components:
+  schemas:
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        title:
+          type: string
+          example: "Introduction to TypeScript"
+        slug:
+          type: string
+          example: "introduction-to-typescript"
+        desc:
+          type: string
+          example: "Learn the fundamentals of TypeScript."
+        thumbnail:
+          type: string
+        price:
+          type: number
+          example: 99.99
+        discountPrice:
+          type: number
+          example: 79.99
+        finalPrice:
+          type: number
+          example: 79.99
+        category:
+          type: string
+          example: "Development"
+        instructor:
+          type: string
+          example: "John Doe"
+        level:
+          type: string
+          enum: [beginner, intermediate, expert]
+          example: "beginner"
+        totalDuration:
+          type: number
+          example: 120
+        playlists:
+          type: array
+          items:
+            $ref: "#/components/schemas/Playlist"
+        status:
+          type: string
+          enum: [draft, pending, published, rejected]
+          example: "published"
+        isRemoved:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:30:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:30:00.000Z"
+
+    CreateCourseRequest:
+      type: object
+      required:
+        - title
+        - desc
+        - price
+        - discountPrice
+        - instructor
+        - level
+        - totalDuration
+        - category
+        - thumbnail
+      properties:
+        title:
+          type: string
+          example: "Introduction to TypeScript"
+        desc:
+          type: string
+          example: "Learn the fundamentals of TypeScript."
+        price:
+          type: number
+          example: 99.99
+        discountPrice:
+          type: number
+          example: 79.99
+        instructor:
+          type: string
+          example: "John Doe"
+        level:
+          type: string
+          enum: [beginner, intermediate, expert]
+          example: "beginner"
+        totalDuration:
+          type: number
+          example: 120
+        category:
+          type: string
+          description: "Category ID"
+          example: "66a1f3e9c4b7d9a123456788"
+        thumbnail:
+          type: string
+          format: binary
+          description: "Course thumbnail image file (multipart/form-data)"
+
+    UpdateCourseRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Introduction to TypeScript"
+        desc:
+          type: string
+          example: "Learn the fundamentals of TypeScript."
+        price:
+          type: number
+          example: 99.99
+        discountPrice:
+          type: number
+          example: 79.99
+        instructor:
+          type: string
+          example: "John Doe"
+        level:
+          type: string
+          enum: [beginner, intermediate, expert]
+          example: "beginner"
+        totalDuration:
+          type: number
+          example: 120
+        category:
+          type: string
+          description: "Category ID"
+          example: "66a1f3e9c4b7d9a123456788"
+        thumbnail:
+          type: string
+          format: binary
+          description: "Course thumbnail image file (multipart/form-data)"
+        status:
+          type: string
+          enum: [draft, pending, published, rejected]
+          example: "published"
+
+    CourseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Course added successfully"
+        data:
+          $ref: "#/components/schemas/Course"
+
+    FetchAllCoursesResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Courses fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Course"
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 5
+            limit:
+              type: integer
+              example: 10
+            page:
+              type: integer
+              example: 1
+            pages:
+              type: integer
+              example: 1
+
+    Video:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456781"
+        title:
+          type: string
+          example: "Video Title"
+        desc:
+          type: string
+          example: "Video Description"
+        videoUrl:
+          type: string
+          example: "https://cloudinary.com/..."
+        publicId:
+          type: string
+          example: "public-id"
+        duration:
+          type: number
+          example: 120
+        order:
+          type: integer
+          example: 1
+
+    Playlist:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456782"
+        title:
+          type: string
+          example: "Playlist Title"
+        desc:
+          type: string
+          example: "Playlist Description"
+        thumbnail:
+          type: string
+          example: "https://cloudinary.com/..."
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Video"
+        order:
+          type: integer
+          example: 1

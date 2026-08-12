@@ -1,0 +1,108 @@
+components:
+  schemas:
+    Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        name:
+          type: string
+          example: "permission.read"
+        group:
+          type: string
+          example: "permission"
+
+    CreatePermissionRequest:
+      type: object
+      required:
+        - name
+        - group
+      properties:
+        name:
+          type: string
+          example: "permission.create"
+        group:
+          type: string
+          example: "permission"
+
+    UpdatePermissionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "permission.update"
+        group:
+          type: string
+          example: "permission"
+
+    PermissionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Permission created successfully"
+        data:
+          $ref: "#/components/schemas/Permission"
+
+    DeletePermissionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "permission.create deleted successfully"
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              example: "66a1f3e9c4b7d9a123456789"
+            name:
+              type: string
+              example: "permission.create"
+            group:
+              type: string
+              example: "permission"
+            createdAt:
+              type: string
+              format: date-time
+              example: "2026-07-23T10:30:00.000Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2026-07-23T10:30:00.000Z"
+
+    FetchAllPermissionsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Permissions fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Permission"
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 5
+            limit:
+              type: integer
+              example: 10
+            page:
+              type: integer
+              example: 1
+            pages:
+              type: integer
+              example: 1

@@ -1,0 +1,155 @@
+paths:
+  /instructors:
+    get:
+      tags:
+        - Instructor
+      summary: Fetch all instructor profiles
+      security: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Number of items per page
+      responses:
+        "200":
+          description: Instructor profiles fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FetchAllInstructorsResponse"
+        "404":
+          description: No instructor profiles found.
+
+    post:
+      tags:
+        - Instructor
+      summary: Create a new instructor profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CreateInstructorRequest"
+      responses:
+        "201":
+          description: Profile created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructorResponse"
+        "400":
+          description: Profile already exists or validation error.
+        "401":
+          description: Unauthorized access.
+
+  /instructors/me:
+    get:
+      tags:
+        - Instructor
+      summary: Fetch own instructor profile
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Profile fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructorResponse"
+        "401":
+          description: Unauthorized access.
+        "404":
+          description: Profile not found.
+
+    patch:
+      tags:
+        - Instructor
+      summary: Update own instructor profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UpdateInstructorRequest"
+      responses:
+        "200":
+          description: Profile updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructorResponse"
+        "401":
+          description: Unauthorized access.
+        "404":
+          description: Profile not found.
+
+  /instructors/{id}:
+    get:
+      tags:
+        - Instructor
+      summary: Fetch instructor profile by ID
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+          description: Instructor profile ID
+      responses:
+        "200":
+          description: Instructor profile fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructorResponse"
+        "400":
+          description: Invalid ID format.
+        "404":
+          description: Profile not found.
+
+  /instructors/{id}/verify:
+    patch:
+      tags:
+        - Instructor
+      summary: Toggle instructor verification status
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "66a1f3e9c4b7d9a123456789"
+          description: Instructor profile ID
+      responses:
+        "200":
+          description: Instructor verification status updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructorResponse"
+        "400":
+          description: Invalid ID format.
+        "401":
+          description: Unauthorized access.
+        "403":
+          description: Forbidden. Requires admin or moderator role.
+        "404":
+          description: Instructor not found.

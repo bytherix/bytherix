@@ -1,0 +1,203 @@
+components:
+  schemas:
+    InquiryType:
+      type: string
+      enum:
+        - service
+        - course
+        - partnership
+        - instructor
+        - marketplace
+        - general
+      example: general
+
+    ContactInterest:
+      type: string
+      enum:
+        - web-development
+        - app-development
+        - game-development
+        - cyber-security
+        - iot-robotics
+        - graphic-design
+        - digital-marketing
+        - ui-ux
+        - research
+      example: web-development
+
+    PreferredContactType:
+      type: string
+      enum:
+        - email
+        - phone
+        - whatsapp
+      example: email
+
+    ContactStatus:
+      type: string
+      enum:
+        - new
+        - contacted
+        - closed
+      example: new
+
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        company:
+          type: string
+          example: "Acme Corp"
+        inquiryType:
+          $ref: "#/components/schemas/InquiryType"
+        interest:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactInterest"
+        subject:
+          type: string
+          example: "Inquiry regarding Web Development services"
+        message:
+          type: string
+          example: "Hello, I would like to inquire about your full-stack web development services."
+        preferredContact:
+          $ref: "#/components/schemas/PreferredContactType"
+        status:
+          $ref: "#/components/schemas/ContactStatus"
+        isRead:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-24T10:00:00.000Z"
+
+    CreateContactRequest:
+      type: object
+      required:
+        - name
+        - email
+        - phone
+        - subject
+        - message
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        company:
+          type: string
+          maxLength: 100
+          example: "Acme Corp"
+        inquiryType:
+          $ref: "#/components/schemas/InquiryType"
+        interest:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactInterest"
+        subject:
+          type: string
+          minLength: 5
+          maxLength: 150
+          example: "Inquiry regarding Web Development services"
+        message:
+          type: string
+          minLength: 10
+          maxLength: 5000
+          example: "Hello, I would like to inquire about your full-stack web development services."
+        preferredContact:
+          $ref: "#/components/schemas/PreferredContactType"
+
+    UpdateContactStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: "#/components/schemas/ContactStatus"
+
+    CreateContactResponse:
+      type: object
+      properties:
+        succses:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Request sent successfully"
+        data:
+          $ref: "#/components/schemas/Contact"
+
+    ContactResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Fetched successfully"
+        data:
+          $ref: "#/components/schemas/Contact"
+
+    ContactPaginationMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 15
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        totalPages:
+          type: integer
+          example: 2
+        hasNextPage:
+          type: boolean
+          example: true
+
+    FetchAllContactsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Requests fetched successfully"
+        data:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Contact"
+            pagination:
+              $ref: "#/components/schemas/ContactPaginationMeta"
