@@ -12,7 +12,7 @@ export class CategoryController {
 
         return res.status(201).json({
             success: true, message: "Category added successfully", data: {
-                id: data._id, name: data.name, desc: data.desc
+                id: data.id, name: data.name, desc: data.desc
             }
         });
     });

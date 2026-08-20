@@ -1,149 +1,83 @@
-import { AppError } from "../../shared/error/appError.js";
-import { getPagination, getPaginationMeta, type PaginationQuery } from "../../shared/helper/pagination.js";
-import { Category, type ICategory } from "./category.model.js";
-
-
-//INPUT PAYLOADS
-class CatPayload {
-    public readonly name: string;
-    public readonly desc: string;
-
-    constructor(data: Partial<ICategory>) {
-        if (!data || !data.name || !data.desc) {
-            throw new AppError("Please fill all the required fields", 400);
-        };
-
-        this.name = data.name.toLowerCase().trim();
-        this.desc = data.desc.trim();
-    }
-}
-
+import type { PaginationQuery } from "../../shared/helper/pagination.js";
+import type { ICategory } from "./category.model.js";
+import { CategoryRepository } from "./category.repository.js";
+import type { CreateCategoryInput, UpdateCategoryInput, CategoryOutput } from "./dto.js";
 
 export class CategoryService {
 
-
     //CREATE
-    static async createCat(data: ICategory) {
-        const input = new CatPayload(data);
-
-        const checkCat = await Category.findOne({ name: input.name });
-
-        if (checkCat) {
-            throw new AppError("Category with same name already exists", 409);
-        }
-
-        const newCat = await Category.create({ name: input.name, desc: input.desc });
-
-        return newCat;
+    static async createCat(data: ICategory): Promise<CategoryOutput> {
+        const repositoryData: CreateCategoryInput = {
+            name: data.name,
+            desc: data.desc
+        };
+        const result = await CategoryRepository.create(repositoryData);
+        return result;
     }
 
     //UPDATE
-    static async updateCat(id: string, data: Partial<ICategory>) {
-
-        const category = await Category.findById(id);
-
-        if (!category) {
-            throw new AppError("Invalid id", 404);
-        }
-
-        const input = new CatPayload(data);
-
-        const updateData: Partial<ICategory> = {};
-
-        if (input.name) {
-            const normalizedName = input.name.toLowerCase().trim();
-            const duplicate = await Category.findOne({ name: normalizedName, _id: { $ne: id } });
-
-            if (duplicate) {
-                throw new AppError("Category with same name already exists", 409);
-            }
-
-            updateData.name = normalizedName;
-        }
-
-        if (input.desc) {
-            updateData.desc = input.desc.trim();
-        }
-
-        const updatedData = await Category.findByIdAndUpdate(id, { $set: updateData }, { new: true, runValidators: true });
-
-        return {
-            success: true, message: `${input.name} updated successfully`, updatedData
+    static async updateCat(id: string, data: Partial<ICategory>): Promise<{ success: boolean; message: string; updatedData: CategoryOutput }> {
+        const repositoryData: UpdateCategoryInput = {
+            name: data.name,
+            desc: data.desc
         };
-    };
-
+        const result = await CategoryRepository.update(id, repositoryData);
+        return {
+            success: true,
+            message: `${result.name} updated successfully`,
+            updatedData: result
+        };
+    }
 
     //DELETE
-    static async deleteCat(id: string) {
-        const category = await Category.findByIdAndDelete(id);
-
-        if (!category) {
-            throw new AppError("Category not found", 404);
-        };
-
-        return {
-            success: true, message: `${category.name} deleted successfully`, category
+    static async deleteCat(id: string): Promise<{ success: boolean; message: string; data: CategoryOutput | null }> {
+        const result = await CategoryRepository.delete(id);
+        if (result.data) {
+            return {
+                success: true,
+                message: `${result.data.name} deleted successfully`,
+                data: {
+                    id: result.data._id.toString(),
+                    name: result.data.name,
+                    desc: result.data.desc,
+                    createdAt: result.data.createdAt,
+                    updatedAt: result.data.updatedAt,
+                }
+            };
         }
-    };
-
+        return {
+            success: false,
+            message: "Category not found",
+            data: null
+        };
+    }
 
     //FETCH BY ID
-    static async getById(id: string) {
-        const category = await Category.findById(id);
-
-        if (!category) {
-            throw new AppError("Category not found", 404);
-        }
-
-        return {
-            success: true, message: "Category fetched successfully", data: {
-                id: category._id, name: category.name, desc: category.desc
-            }
-        }
-    };
-
+    static async getById(id: string): Promise<CategoryOutput> {
+        const result = await CategoryRepository.getById(id);
+        // Repository already returns CategoryOutput with string id
+        return result;
+    }
 
     //FETCH ALL
-    static async getAll(query: PaginationQuery = {}) {
-        const { page, limit, skip } = getPagination(query);
-
-        const [total, categories] = await Promise.all([
-            Category.countDocuments(),
-            Category.find()
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit)
-                .lean(),
-        ]);
-
-        if (!categories || categories.length === 0) {
-            throw new AppError("Categories not available", 404);
-        }
-
-        const formattedCategories = categories.map((cat) => ({
-            id: cat._id,
-            name: cat.name,
-            desc: cat.desc,
-        }));
-
-        const paginationMeta = getPaginationMeta({ total, page, limit });
-
+    static async getAll(query: PaginationQuery = {}): Promise<{
+        success: boolean;
+        message: string;
+        data: CategoryOutput[];
+        meta: any;
+    }> {
+        const result = await CategoryRepository.getAll(query);
         return {
             success: true,
             message: "Categories fetched successfully",
-            data: formattedCategories,
-            meta: paginationMeta,
+            data: result.data,
+            meta: result.meta,
         };
     }
 
     //CATEGORY VALIDATION
-    static async getCatId(id: string) {
-        const category = await Category.findById(id);
-
-        if (!category) {
-            throw new AppError("Category not found", 404);
-        }
-
-        return category;
+    static async getCatId(id: string): Promise<CategoryOutput> {
+        const result = await CategoryRepository.getById(id);
+        return result;
     }
 }
