@@ -10,13 +10,17 @@ paths:
           required: false
           schema:
             type: integer
+            minimum: 1
             default: 1
+
         - name: limit
           in: query
           required: false
           schema:
             type: integer
+            minimum: 1
             default: 10
+
       responses:
         "200":
           description: Courses fetched successfully.
@@ -24,6 +28,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FetchAllCoursesResponse"
+
         "404":
           description: Courses not available.
 
@@ -33,12 +38,14 @@ paths:
       summary: Create a course (Admin/Moderator)
       security:
         - BearerAuth: []
+
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
               $ref: "#/components/schemas/CreateCourseRequest"
+
       responses:
         "201":
           description: Course added successfully.
@@ -46,10 +53,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CourseResponse"
+
         "400":
           description: Required fields missing or validation failed.
+
         "401":
           description: Unauthorized.
+
         "403":
           description: Forbidden. Missing course.create permission.
 
@@ -58,13 +68,15 @@ paths:
       tags:
         - Courses
       summary: Fetch published course by slug (Public)
+
       parameters:
         - name: slug
           in: path
           required: true
           schema:
             type: string
-          example: "introduction-to-typescript"
+          example: introduction-to-typescript
+
       responses:
         "200":
           description: Course fetched successfully.
@@ -72,21 +84,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CourseResponse"
+
         "404":
           description: Course not found.
 
-  /courses/{id}:
+  /courses/public/{id}:
     get:
       tags:
         - Courses
       summary: Fetch published course by ID (Public)
+
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-          example: "66a1f3e9c4b7d9a123456789"
+          example: 66a1f3e9c4b7d9a123456789
+
       responses:
         "200":
           description: Course fetched successfully.
@@ -94,68 +109,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CourseResponse"
-        "404":
-          description: Course not found.
 
-    patch:
-      tags:
-        - Courses
-      summary: Update course by ID (Admin/Moderator)
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          example: "66a1f3e9c4b7d9a123456789"
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/UpdateCourseRequest"
-      responses:
-        "200":
-          description: Course updated successfully.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CourseResponse"
         "400":
-          description: Validation error or invalid ID.
-        "401":
-          description: Unauthorized.
-        "403":
-          description: Forbidden. Missing course.update permission.
-        "404":
-          description: Course not found.
+          description: Invalid course ID.
 
-    delete:
-      tags:
-        - Courses
-      summary: Hard delete course (Admin/Moderator)
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          example: "66a1f3e9c4b7d9a123456789"
-      responses:
-        "200":
-          description: Course deleted successfully.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CourseResponse"
-        "401":
-          description: Unauthorized.
-        "403":
-          description: Forbidden. Missing course.delete permission.
         "404":
           description: Course not found.
 
@@ -163,22 +120,27 @@ paths:
     get:
       tags:
         - Courses
-      summary: Fetch all courses including drafts/removed (Admin/Moderator)
+      summary: Fetch all courses including drafts and removed courses (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: page
           in: query
           required: false
           schema:
             type: integer
+            minimum: 1
             default: 1
+
         - name: limit
           in: query
           required: false
           schema:
             type: integer
+            minimum: 1
             default: 10
+
       responses:
         "200":
           description: Courses fetched successfully.
@@ -186,10 +148,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FetchAllCoursesResponse"
+
         "401":
           description: Unauthorized.
+
         "403":
           description: Forbidden. Missing course.read permission.
+
         "404":
           description: Courses not available.
 
@@ -197,16 +162,18 @@ paths:
     get:
       tags:
         - Courses
-      summary: Fetch course including draft/removed by ID (Admin/Moderator)
+      summary: Fetch course including draft and removed status by ID (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-          example: "66a1f3e9c4b7d9a123456789"
+          example: 66a1f3e9c4b7d9a123456789
+
       responses:
         "200":
           description: Course fetched successfully.
@@ -214,10 +181,94 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CourseResponse"
+
+        "400":
+          description: Invalid course ID.
+
         "401":
           description: Unauthorized.
+
         "403":
           description: Forbidden. Missing course.read permission.
+
+        "404":
+          description: Course not found.
+
+  /courses/{id}:
+    patch:
+      tags:
+        - Courses
+      summary: Update course by ID (Admin/Moderator)
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 66a1f3e9c4b7d9a123456789
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UpdateCourseRequest"
+
+      responses:
+        "200":
+          description: Course updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+
+        "400":
+          description: Validation error or invalid course ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course not found.
+
+    delete:
+      tags:
+        - Courses
+      summary: Hard delete course by ID (Admin/Moderator)
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 66a1f3e9c4b7d9a123456789
+
+      responses:
+        "200":
+          description: Course deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+
+        "400":
+          description: Invalid course ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.delete permission.
+
         "404":
           description: Course not found.
 
@@ -228,24 +279,32 @@ paths:
       summary: Toggle soft delete status of course (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-          example: "66a1f3e9c4b7d9a123456789"
+          example: 66a1f3e9c4b7d9a123456789
+
       responses:
         "200":
-          description: Course soft delete toggled successfully.
+          description: Course soft delete status toggled successfully.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CourseResponse"
+
+        "400":
+          description: Invalid course ID.
+
         "401":
           description: Unauthorized.
+
         "403":
           description: Forbidden. Missing course.delete permission.
+
         "404":
           description: Course not found.
 
@@ -256,12 +315,14 @@ paths:
       summary: Add playlist to course (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: courseId
           in: path
           required: true
           schema:
             type: string
+
       requestBody:
         required: true
         content:
@@ -275,16 +336,33 @@ paths:
               properties:
                 title:
                   type: string
+
                 desc:
                   type: string
+
                 order:
                   type: integer
+                  minimum: 0
+
                 thumbnail:
                   type: string
                   format: binary
+
       responses:
         "201":
           description: Playlist added successfully.
+
+        "400":
+          description: Validation error or invalid course ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course not found.
 
   /courses/{courseId}/playlists/{playlistId}:
     patch:
@@ -293,17 +371,20 @@ paths:
       summary: Update playlist (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: courseId
           in: path
           required: true
           schema:
             type: string
+
         - name: playlistId
           in: path
           required: true
           schema:
             type: string
+
       requestBody:
         required: true
         content:
@@ -313,36 +394,69 @@ paths:
               properties:
                 title:
                   type: string
+
                 desc:
                   type: string
+
                 order:
                   type: integer
+                  minimum: 0
+
                 thumbnail:
                   type: string
                   format: binary
+
       responses:
         "200":
           description: Playlist updated successfully.
+
+        "400":
+          description: Validation error or invalid ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course or playlist not found.
+
     delete:
       tags:
         - Courses
       summary: Delete playlist (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: courseId
           in: path
           required: true
           schema:
             type: string
+
         - name: playlistId
           in: path
           required: true
           schema:
             type: string
+
       responses:
         "200":
           description: Playlist deleted successfully.
+
+        "400":
+          description: Invalid course or playlist ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course or playlist not found.
 
   /courses/{courseId}/playlists/{playlistId}/videos:
     post:
@@ -351,17 +465,20 @@ paths:
       summary: Add video to playlist (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: courseId
           in: path
           required: true
           schema:
             type: string
+
         - name: playlistId
           in: path
           required: true
           schema:
             type: string
+
       requestBody:
         required: true
         content:
@@ -374,22 +491,43 @@ paths:
                 - publicId
                 - duration
                 - order
+
               properties:
                 title:
                   type: string
+
                 desc:
                   type: string
+
                 videoUrl:
                   type: string
+
                 publicId:
                   type: string
+
                 duration:
                   type: number
+                  minimum: 0
+
                 order:
                   type: integer
+                  minimum: 0
+
       responses:
         "201":
           description: Video added successfully.
+
+        "400":
+          description: Validation error or invalid ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course or playlist not found.
 
   /courses/{courseId}/playlists/{playlistId}/videos/{videoId}:
     patch:
@@ -398,22 +536,26 @@ paths:
       summary: Update video details in playlist (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: courseId
           in: path
           required: true
           schema:
             type: string
+
         - name: playlistId
           in: path
           required: true
           schema:
             type: string
+
         - name: videoId
           in: path
           required: true
           schema:
             type: string
+
       requestBody:
         required: true
         content:
@@ -423,41 +565,78 @@ paths:
               properties:
                 title:
                   type: string
+
                 desc:
                   type: string
+
                 videoUrl:
                   type: string
+
                 publicId:
                   type: string
+
                 duration:
                   type: number
+                  minimum: 0
+
                 order:
                   type: integer
+                  minimum: 0
+
       responses:
         "200":
           description: Video updated successfully.
+
+        "400":
+          description: Validation error or invalid ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course, playlist, or video not found.
+
     delete:
       tags:
         - Courses
       summary: Delete video from playlist (Admin/Moderator)
       security:
         - BearerAuth: []
+
       parameters:
         - name: courseId
           in: path
           required: true
           schema:
             type: string
+
         - name: playlistId
           in: path
           required: true
           schema:
             type: string
+
         - name: videoId
           in: path
           required: true
           schema:
             type: string
+
       responses:
         "200":
           description: Video deleted successfully.
+
+        "400":
+          description: Invalid course, playlist, or video ID.
+
+        "401":
+          description: Unauthorized.
+
+        "403":
+          description: Forbidden. Missing course.update permission.
+
+        "404":
+          description: Course, playlist, or video not found.

@@ -11,7 +11,7 @@ const router = Router();
 // PUBLIC ROUTES
 router.get("/", CourseController.getCoursesByPublicAll);
 router.get("/slug/:slug", CourseController.getCourseBySlugPublic);
-router.get("/:id", CourseController.getCourseByIdPublic);
+router.get("/public/:id", CourseController.getCourseByIdPublic);
 
 // PRIVATE ROUTES
 router.use(auth);

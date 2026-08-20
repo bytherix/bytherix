@@ -35,7 +35,7 @@ export interface ICourse extends Document {
     instructor: string;
     level: "beginner" | "intermediate" | "expert";
     totalDuration: number;
-    playlists: IPlaylist[]; // Replaced single/flat structure with playlists
+    playlists: IPlaylist[];
     status: "draft" | "pending" | "published" | "rejected";
     isRemoved: boolean;
     createdAt: Date;
