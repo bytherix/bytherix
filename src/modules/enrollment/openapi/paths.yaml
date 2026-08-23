@@ -3,7 +3,7 @@ paths:
     post:
       tags:
         - Enrollments
-      summary: Enroll in a course (Authenticated)
+      summary: Enroll in a course
       security:
         - BearerAuth: []
       requestBody:
@@ -11,54 +11,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateEnrollmentRequest"
+              $ref: '#/components/schemas/CreateEnrollmentRequest'
       responses:
-        "201":
-          description: Enrolled successfully.
+        '201':
+          description: Successfully enrolled in the course
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EnrollmentResponse"
-        "400":
-          description: Duplicate enrollment or invalid data.
-        "401":
-          description: Unauthorized.
-        "404":
-          description: Course not found.
-
+                $ref: '#/components/schemas/EnrollmentResponse'
+        '400':
+          description: Course ID is required or validation failed
+        '401':
+          description: Unauthorized
+        '409':
+          description: Already enrolled in this course
   /enrollments/me:
     get:
       tags:
         - Enrollments
-      summary: Retrieve all enrollments of the logged-in user (Authenticated)
+      summary: Get user's enrollments
       security:
         - BearerAuth: []
       responses:
-        "200":
-          description: Enrollments fetched successfully.
+        '200':
+          description: Enrollments fetched successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "Enrollments fetched successfully"
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Enrollment"
-        "401":
-          description: Unauthorized.
-
+                $ref: '#/components/schemas/GetMyEnrollmentsResponse'
+        '401':
+          description: Unauthorized
   /enrollments/{courseId}:
     get:
       tags:
         - Enrollments
-      summary: Fetch enrollment details for a specific course (Authenticated)
+      summary: Get enrollment by course ID
       security:
         - BearerAuth: []
       parameters:
@@ -67,24 +54,24 @@ paths:
           required: true
           schema:
             type: string
-          example: "66a1f3e9c4b7d9a123456789"
+          example: 66a1f3e9c4b7d9a123456789
       responses:
-        "200":
-          description: Enrollment fetched successfully.
+        '200':
+          description: Enrollment details fetched successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EnrollmentResponse"
-        "401":
-          description: Unauthorized.
-        "404":
-          description: Enrollment not found.
-
-  /enrollments/{courseId}/progress:
+                $ref: '#/components/schemas/EnrollmentResponse'
+        '400':
+          description: Course ID is required or invalid
+        '401':
+          description: Unauthorized
+        '404':
+          description: Enrollment not found for this course
     patch:
       tags:
         - Enrollments
-      summary: Update course progression by marking a video completed (Authenticated)
+      summary: Update course progress
       security:
         - BearerAuth: []
       parameters:
@@ -93,23 +80,49 @@ paths:
           required: true
           schema:
             type: string
-          example: "66a1f3e9c4b7d9a123456789"
+          example: 66a1f3e9c4b7d9a123456789
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateProgressRequest"
+              $ref: '#/components/schemas/UpdateProgressRequest'
       responses:
-        "200":
-          description: Progress updated successfully.
+        '200':
+          description: Progress updated successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EnrollmentResponse"
-        "400":
-          description: Invalid inputs or video does not belong to course.
-        "401":
-          description: Unauthorized.
-        "404":
-          description: Enrollment or course not found.
+                $ref: '#/components/schemas/EnrollmentResponse'
+        '400':
+          description: Course ID or Video ID is required or invalid
+        '401':
+          description: Unauthorized
+        '404':
+          description: Enrollment not found or video does not belong to this course
+    delete:
+      tags:
+        - Enrollments
+      summary: Cancel enrollment
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 66a1f3e9c4b7d9a123456789
+      responses:
+        '200':
+          description: Enrollment cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponse'
+        '400':
+          description: Course ID is required or invalid
+        '401':
+          description: Unauthorized
+        '404':
+          description: Enrollment not found

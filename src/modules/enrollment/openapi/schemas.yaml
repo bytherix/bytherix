@@ -8,64 +8,42 @@ components:
           example: "66a1f3e9c4b7d9a123456789"
         user:
           type: string
-          example: "66a1f3e9c4b7d9a123456780"
+          example: "66a1f3e9c4b7d9a123456788"
         course:
-          type: object
-          properties:
-            id:
-              type: string
-              example: "66a1f3e9c4b7d9a123456789"
-            title:
-              type: string
-              example: "Introduction to TypeScript"
-            desc:
-              type: string
-              example: "Learn the fundamentals of TypeScript."
-            thumbnail:
-              type: object
-              properties:
-                imageUrl:
-                  type: string
-                  example: "https://example.com/image.png"
-                publicId:
-                  type: string
-                  example: "image_id"
-            level:
-              type: string
-              example: "beginner"
+          type: string
+          example: "66a1f3e9c4b7d9a123456787"
         status:
           type: string
           enum: [active, completed, cancelled]
-          example: "active"
+          example: active
         progress:
           type: number
-          example: 25
+          example: 45
         completedVideoIds:
           type: array
           items:
             type: string
-          example: ["66a1f3e9c4b7d9a123456781"]
+          example: ["66a1f3e9c4b7d9a123456781", "66a1f3e9c4b7d9a123456782"]
         enrolledAt:
           type: string
           format: date-time
-          example: "2026-08-07T14:15:00.000Z"
+          example: "2026-07-23T10:30:00.000Z"
         lastAccessedAt:
           type: string
           format: date-time
-          example: "2026-08-07T14:18:00.000Z"
+          example: "2026-07-23T10:30:00.000Z"
         completedAt:
           type: string
           format: date-time
-          nullable: true
-          example: null
+          example: "2026-07-23T10:30:00.000Z"
         createdAt:
           type: string
           format: date-time
-          example: "2026-08-07T14:15:00.000Z"
+          example: "2026-07-23T10:30:00.000Z"
         updatedAt:
           type: string
           format: date-time
-          example: "2026-08-07T14:18:00.000Z"
+          example: "2026-07-23T10:30:00.000Z"
 
     CreateEnrollmentRequest:
       type: object
@@ -74,7 +52,8 @@ components:
       properties:
         courseId:
           type: string
-          example: "66a1f3e9c4b7d9a123456789"
+          description: "Course ID to enroll in"
+          example: "66a1f3e9c4b7d9a123456787"
 
     UpdateProgressRequest:
       type: object
@@ -83,6 +62,7 @@ components:
       properties:
         videoId:
           type: string
+          description: "Video ID to mark as completed"
           example: "66a1f3e9c4b7d9a123456781"
 
     EnrollmentResponse:
@@ -96,3 +76,17 @@ components:
           example: "Successfully enrolled in the course"
         data:
           $ref: "#/components/schemas/Enrollment"
+
+    GetMyEnrollmentsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Enrollments fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Enrollment"
