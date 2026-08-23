@@ -39,6 +39,12 @@ const permissions = [
     { name: "course.update", group: "course" },
     { name: "course.delete", group: "course" },
 
+    // ENROLLMENT
+    { name: "enrollment.create", group: "enrollment" },
+    { name: "enrollment.read", group: "enrollment" },
+    { name: "enrollment.update", group: "enrollment" },
+    { name: "enrollment.delete", group: "enrollment" },
+
     // CONTACT
     { name: "contact.read", group: "contact" },
     { name: "contact.update", group: "contact" },
