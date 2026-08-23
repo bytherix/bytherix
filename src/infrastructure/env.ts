@@ -41,4 +41,8 @@ export const ENV = {
     REDIS_PASSWORD: getEnv('REDIS_PASSWORD'),
     REDIS_HOST: getEnv('REDIS_HOST'),
     REDIS_PORT: getEnv('REDIS_PORT'),
+
+    ESEWA_SECRET_KEY: getEnv('ESEWA_SECRET_KEY'),
+    ESEWA_MERCHANT_ID: getEnv('ESEWA_MERCHANT_ID'),
+    ESEWA_URL: getEnv('ESEWA__URL')
 };
