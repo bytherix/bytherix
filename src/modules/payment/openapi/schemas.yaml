@@ -1,0 +1,244 @@
+components:
+  schemas:
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        user:
+          type: string
+          example: "66a1f3e9c4b7d9a123456788"
+        course:
+          type: string
+          example: "66a1f3e9c4b7d9a123456787"
+        amount:
+          type: number
+          example: 99.99
+        currency:
+          type: string
+          example: "USD"
+        provider:
+          type: string
+          example: "esewa"
+        providerPaymentId:
+          type: string
+          example: "txn_1234567890_abcdef"
+        status:
+          type: string
+          enum: [initiated, pending, success, failed, cancelled, expired]
+          example: "success"
+        purpose:
+          type: string
+          example: "course_enrollment"
+        initiatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:30:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:30:00.000Z"
+        verifiedAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T10:35:00.000Z"
+        expiresAt:
+          type: string
+          format: date-time
+          example: "2026-07-23T11:30:00.000Z"
+        metadata:
+          type: object
+          additionalProperties: true
+          example: {}
+
+    InitiatePaymentRequest:
+      type: object
+      required:
+        - courseId
+        - amount
+      properties:
+        courseId:
+          type: string
+          description: "Course ID to purchase"
+          example: "66a1f3e9c4b7d9a123456787"
+        amount:
+          type: number
+          description: "Payment amount"
+          example: 99.99
+        successUrl:
+          type: string
+          description: "URL to redirect after successful payment"
+          example: "https://frontend.example.com/payment-success"
+        failureUrl:
+          type: string
+          description: "URL to redirect after failed payment"
+          example: "https://frontend.example.com/payment-failed"
+
+    VerifyPaymentRequest:
+      type: object
+      required:
+        - amount
+        - transaction_uuid
+        - product_code
+        - signature
+        - signed_field_names
+      properties:
+        amount:
+          type: string
+          description: "Payment amount"
+          example: "99.99"
+        transaction_uuid:
+          type: string
+          description: "Transaction UUID from eSewa"
+          example: "txn_1234567890_abcdef"
+        product_code:
+          type: string
+          description: "Product code (merchant ID) from eSewa"
+          example: "EPAYTEST"
+        signature:
+          type: string
+          description: "eSewa payment signature"
+          example: "MEUCIQD..."
+        signed_field_names:
+          type: string
+          description: "Comma-separated list of field names used in signature"
+          example: "total_amount,transaction_uuid,product_code"
+        # Additional fields that eSewa might send
+        tax_amount:
+          type: string
+          example: "0"
+        total_amount:
+          type: string
+          example: "99.99"
+        product_service_charge:
+          type: string
+          example: "0"
+        product_delivery_charge:
+          type: string
+          example: "0"
+        success_url:
+          type: string
+          example: "https://frontend.example.com/payment-success"
+        failure_url:
+          type: string
+          example: "https://frontend.example.com/payment-failed"
+        signed_field_names:
+          type: string
+          example: "total_amount,transaction_uuid,product_code"
+
+    InitiatePaymentResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          example: "66a1f3e9c4b7d9a123456789"
+        transactionUuid:
+          type: string
+          example: "txn_1234567890_abcdef"
+        esewaPaymentUrl:
+          type: string
+          example: "https://uat.esewa.com.np/epay/main"
+        esewaPaymentData:
+          type: object
+          additionalProperties: true
+          description: "Form data to be submitted to eSewa"
+          example:
+            amount: "99.99"
+            failure_url: "https://frontend.example.com/payment-failed"
+            product_delivery_charge: "0"
+            product_service_charge: "0"
+            product_code: "EPAYTEST"
+            signed_field_names: "total_amount,transaction_uuid,product_code"
+            success_url: "https://frontend.example.com/payment-success"
+            tax_amount: "0"
+            total_amount: "99.99"
+            transaction_uuid: "txn_1234567890_abcdef"
+            signature: "MEUCIQD..."
+
+    VerifyPaymentResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Payment verified successfully"
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "66a1f3e9c4b7d9a123456789"
+            status:
+              type: string
+              example: "success"
+            verifiedAt:
+              type: string
+              format: date-time
+              example: "2026-07-23T10:35:00.000Z"
+            amount:
+              type: number
+              example: 99.99
+            currency:
+              type: string
+              example: "USD"
+
+    GetMyPaymentsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Payments fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 5
+            limit:
+              type: integer
+              example: 10
+            page:
+              type: integer
+              example: 1
+            pages:
+              type: integer
+              example: 1
+
+    GetCoursePaymentsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Course payments fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 5
+            limit:
+              type: integer
+              example: 10
+            page:
+              type: integer
+              example: 1
+            pages:
+              type: integer
+              example: 1
