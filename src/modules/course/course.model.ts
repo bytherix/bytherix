@@ -38,6 +38,7 @@ export interface ICourse extends Document {
     playlists: IPlaylist[];
     status: "draft" | "pending" | "published" | "rejected";
     isRemoved: boolean;
+    isFree: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -132,8 +133,12 @@ const courseSchema: Schema<ICourse> = new Schema({
         min: 0,
     },
     finalPrice: {
-        type: Number,
-        min: 0,
+      type: Number,
+      min: 0,
+    },
+    isFree: {
+      type: Boolean,
+      default: false
     },
     category: {
         type: Types.ObjectId,
@@ -166,5 +171,13 @@ const courseSchema: Schema<ICourse> = new Schema({
         default: false,
     },
 }, { timestamps: true });
+
+// Pre-save hook to automatically set isFree based on finalPrice
+courseSchema.pre('save', function(next: any) {
+  // If finalPrice is 0, set isFree to true
+  // If finalPrice is greater than 0, set isFree to false
+  this.isFree = this.finalPrice === 0;
+  next();
+});
 
 export const Course: Model<ICourse> = mongoose.models.Course || mongoose.model<ICourse>("Course", courseSchema);
