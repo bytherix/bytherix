@@ -12,6 +12,7 @@ export interface CreateCourseInput {
   category: string;
   status?: CourseStatus;
   playlists?: any;
+  isFree?: boolean;
 }
 
 export interface UpdateCourseInput extends Partial<CreateCourseInput> { }
@@ -32,6 +33,7 @@ export interface CourseOutput {
   slug: string;
   status: CourseStatus;
   isRemoved: boolean;
+  isFree: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

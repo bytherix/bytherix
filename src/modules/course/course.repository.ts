@@ -1,18 +1,17 @@
-// Course Repository - handles direct database operations
 import { AppError } from "../../shared/error/appError.js";
 import { deleteImage, uploadImage } from "../../shared/helper/fileHandler.js";
 import { getPagination, getPaginationMeta, type PaginationQuery } from "../../shared/helper/pagination.js";
 import { getCatById } from "../category/index.js";
-import { Course, type ICourse, type IPlaylist, type IVideo } from "./course.model.js";
+import { Course, type ICourse, type IPlaylist } from "./course.model.js";
 import { generateUniqueSlug } from "./course.slug.js";
 import { PlaylistService } from "./playlist.service.js";
 import mongoose from "mongoose";
-import type { CreateCourseInput, UpdateCourseInput, CourseOutput, CourseLevel, CourseStatus } from "./dto.js";
+import type { CreateCourseInput, UpdateCourseInput, CourseLevel, CourseStatus } from "./dto.js";
 
 export class CourseRepository {
   // CREATE
   static async create(data: CreateCourseInput, file: any) {
-    const { title, desc, price, discountPrice, instructor, level, totalDuration, category, status, playlists } = data;
+    const { title, desc, price, discountPrice, instructor, level, totalDuration, category, status, playlists, isFree } = data;
 
     // Validate enum values
     if (level && !['beginner', 'intermediate', 'expert'].includes(level)) {
@@ -75,6 +74,7 @@ export class CourseRepository {
       playlists: parsedPlaylists,
       slug,
       status: validatedStatus as CourseStatus,
+      isFree: isFree ?? false
     });
 
     return {
@@ -120,16 +120,17 @@ export class CourseRepository {
       totalDuration,
       category,
       status,
-      playlists
+      playlists,
+      isFree
     } = data;
 
-    // Validate enum values
+    // Validate enum values if provided
     if (level && !['beginner', 'intermediate', 'expert'].includes(level)) {
       throw new AppError("Invalid level", 400);
     }
     const validatedStatus = status && !['draft', 'pending', 'published', 'rejected'].includes(status)
       ? (() => { throw new AppError("Invalid status", 400); })()
-      : status;
+      : (status || course.status);
 
     const updateData: Partial<ICourse> = {};
 
@@ -172,6 +173,9 @@ export class CourseRepository {
 
     if (status) {
       updateData.status = status;
+    }
+    if (isFree !== undefined) {
+      updateData.isFree = isFree;
     }
 
     if (playlists !== undefined) {
@@ -330,6 +334,7 @@ export class CourseRepository {
         level: course.level,
         status: course.status,
         createdAt: course.createdAt,
+        isFree: course.isFree,
       }
     };
   }
@@ -373,6 +378,7 @@ export class CourseRepository {
         level: course.level,
         status: course.status,
         createdAt: course.createdAt,
+        isFree: course.isFree,
       }
     };
   }
@@ -415,6 +421,7 @@ export class CourseRepository {
         thumbnail: course.thumbnail?.imageUrl,
         level: course.level,
         status: course.status,
+        isFree: course.isFree,
       })),
       meta: getPaginationMeta({
         total,
@@ -458,6 +465,7 @@ export class CourseRepository {
         level: course.level,
         isRemoved: course.isRemoved,
         status: course.status,
+        isFree: course.isFree,
         createdAt: course.createdAt,
         updatedAt: course.updatedAt,
       }
@@ -498,6 +506,7 @@ export class CourseRepository {
         level: course.level,
         isRemoved: course.isRemoved,
         status: course.status,
+        isFree: course.isFree,
         createdAt: course.createdAt,
         updatedAt: course.updatedAt,
       })),
