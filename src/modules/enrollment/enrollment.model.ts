@@ -3,12 +3,13 @@ import mongoose, { Document, Model, Schema, Types } from "mongoose";
 export interface IEnrollment extends Document {
     user: Types.ObjectId;
     course: Types.ObjectId;
-    status: "active" | "completed" | "cancelled";
+    status: "pending_payment" | "active" | "completed" | "cancelled";
     progress: number;
     completedVideoIds: Types.ObjectId[];
     enrolledAt: Date;
     lastAccessedAt?: Date;
     completedAt?: Date;
+    payment?: Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -31,8 +32,8 @@ const enrollmentSchema = new Schema<IEnrollment>(
 
         status: {
             type: String,
-            enum: ["active", "completed", "cancelled"],
-            default: "active",
+            enum: ["pending_payment", "active", "completed", "cancelled"],
+            default: "pending_payment",
         },
 
         progress: {
@@ -60,12 +61,23 @@ const enrollmentSchema = new Schema<IEnrollment>(
         completedAt: {
             type: Date,
         },
+
+        payment: {
+            type: Schema.Types.ObjectId,
+            ref: "Payment",
+        },
     },
     {
         timestamps: true,
     }
 );
 
-enrollmentSchema.index({ user: 1, course: 1 }, { unique: true });
+enrollmentSchema.index(
+    { user: 1, course: 1 },
+    {
+        unique: true,
+        partialFilterExpression: { status: { $in: ["pending_payment", "active"] } }
+    }
+);
 
 export const Enrollment: Model<IEnrollment> = mongoose.models.Enrollment || mongoose.model<IEnrollment>("Enrollment", enrollmentSchema);
