@@ -11,6 +11,7 @@ import userRoute from "../modules/user/user.route.js";
 import instructorRoute from "../modules/instructor/instructor.route.js";
 import userProfileRoute from "../modules/user-profile/userProfile.route.js";
 import enrollmentRoute from "../modules/enrollment/enrollment.route.js";
+import paymentRoute from "../modules/payment/payment.route.js";
 
 const appRouter = Router();
 
@@ -25,5 +26,6 @@ appRouter.use("/users", userRoute);
 appRouter.use("/instructors", instructorRoute);
 appRouter.use("/user-profiles", userProfileRoute);
 appRouter.use("/enrollments", enrollmentRoute);
+appRouter.use("/payments", paymentRoute);
 
 export default appRouter;
