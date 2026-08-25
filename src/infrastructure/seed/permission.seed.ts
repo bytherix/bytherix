@@ -45,6 +45,11 @@ const permissions = [
     { name: "enrollment.update", group: "enrollment" },
     { name: "enrollment.delete", group: "enrollment" },
 
+    // PAYMENT
+    { name: "payment.initiate", group: "payment" },
+    { name: "payment.read", group: "payment" },
+    { name: "payment.verify", group: "payment" },
+
     // CONTACT
     { name: "contact.read", group: "contact" },
     { name: "contact.update", group: "contact" },

@@ -46,6 +46,9 @@ export const seedRoles = async (permissions: any[]) => {
                 permissionMap["enrollment.read"],
                 permissionMap["enrollment.update"],
                 permissionMap["enrollment.delete"],
+                permissionMap["payment.initiate"],
+                permissionMap["payment.read"],
+                permissionMap["payment.verify"],
 
                 permissionMap["contact.read"],
                 permissionMap["contact.update"],
