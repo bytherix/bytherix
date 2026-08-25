@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 export class EnrollmentRepository {
   // CREATE ENROLLMENT
-  static async create(userId: string, courseId: string) {
+  static async create(userId: string, courseId: string, isFree: boolean = false) {
     // Validate IDs
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       throw new AppError("Invalid or missing user ID", 400);
@@ -22,10 +22,11 @@ export class EnrollmentRepository {
       throw new AppError("Course not found or not accessible", 404);
     }
 
-    // Prevent duplicate enrollments
+    // Prevent duplicate enrollments (only check for pending_payment or active statuses)
     const existingEnrollment = await Enrollment.findOne({
       user: userId,
-      course: courseId
+      course: courseId,
+      status: { $in: ["pending_payment", "active"] }
     });
     if (existingEnrollment) {
       throw new AppError("You are already enrolled in this course", 400);
@@ -34,10 +35,12 @@ export class EnrollmentRepository {
     const newEnrollment = await Enrollment.create({
       user: userId,
       course: courseId,
-      status: "active",
+      status: isFree ? "active" : "pending_payment",
       progress: 0,
       completedVideoIds: [],
       enrolledAt: new Date(),
+      // Payment will be set later for paid courses after successful payment verification
+      ...(isFree ? {} : { payment: undefined })
     });
 
     return newEnrollment;
