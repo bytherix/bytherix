@@ -56,6 +56,10 @@ const swaggerSpec = swaggerJsdoc({
                 name: "Enrollments",
                 description: "Course enrollment and progress tracking.",
             },
+            {
+                name: "Payment",
+                description: "Payment processing and management.",
+            }
         ],
 
         components: {
