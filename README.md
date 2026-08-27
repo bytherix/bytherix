@@ -1,6 +1,6 @@
 # Bytherix Backend API
 
-API documentation: [bytherix.onrender.com/api/v1/api-docs](https://bytherix.onrender.com/api/v1/api-docs)
+API documentation: [https://bytherix-cjlv.onrender.com/api/v1/api-docs](https://bytherix-cjlv.onrender.com/api/v1/api-docs)
 
 ## Getting Started
 
