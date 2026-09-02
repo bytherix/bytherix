@@ -41,8 +41,7 @@
     "slugify": "^1.6.9",
     "swagger-jsdoc": "^6.3.0",
     "swagger-model-validator": "^3.0.21",
-    "swagger-ui-express": "^5.0.1",
-    "tsx": "^4.23.1"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
@@ -52,6 +51,7 @@
     "@types/passport-google-oauth20": "^2.0.17",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }
 }

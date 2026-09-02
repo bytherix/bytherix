@@ -104,7 +104,6 @@ components:
           type: string
           description: "Comma-separated list of field names used in signature"
           example: "total_amount,transaction_uuid,product_code"
-        # Additional fields that eSewa might send
         tax_amount:
           type: string
           example: "0"
@@ -123,9 +122,6 @@ components:
         failure_url:
           type: string
           example: "https://frontend.example.com/payment-failed"
-        signed_field_names:
-          type: string
-          example: "total_amount,transaction_uuid,product_code"
 
     InitiatePaymentResponse:
       type: object
